@@ -3,32 +3,47 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.todo.app.mapper.TodoMapper">
+	<select id="viewCategory" resultType="com.todo.app.entity.Category">
+		select * from categoryDB
+	</select>	
+	
   <select id="selectAll" resultType="com.todo.app.entity.Todo">
-    select * from todo_items
+    select * from mainTodoDB
+  </select>
+  
+
+  
+    <select id="categoryTodo" resultType="com.todo.app.entity.Todo">
+	select * from mainTodoDB where category = 6
   </select>
   
   <select id="selectIncomplete" resultType="com.todo.app.entity.Todo">
-  	select * from todo_items where done_flg = 0
+	  select * from mainTodoDB where done_flg = 0
   </select>
   
   <select id="selectComplete" resultType="com.todo.app.entity.Todo">
-  	select * from todo_items where done_flg = 1
+	  select * from mainTodoDB where done_flg = 1
   </select>
-
+  
   <insert id="add" parameterType="com.todo.app.entity.Todo">
-    insert into todo_items (title,time_limit)
-    values (#{title},to_date(#{time_limit},'yy-mm-dd'))
+	  insert into mainTodoDB (title,time_limit,importance,category)
+	  values (#{title},to_date(#{time_limit},'yy-mm-dd'),#{importance},#{category})
   </insert>
-
+  
+  <insert id="addCategory" parameterType="com.todo.app.entity.Category">
+	  insert into categoryDB (categoryName)
+	  values (#{categoryName})
+  </insert>
+  
   <update id="update" parameterType="com.todo.app.entity.Todo">
-    update todo_items set
-      title = #{title},
-      time_limit = to_date(#{time_limit},'yy-mm-dd'),
-      done_flg = #{done_flg}
-      where id = #{id}
+	  update mainTodoDB set
+	  	title = #{title},
+	  	time_limit = to_date(#{time_limit},'yy-mm-dd'),
+	  	done_flg = #{done_flg}
+	  	where id = #{id}
   </update>
   
   <delete id="delete" parameterType="com.todo.app.entity.Todo">
-  	delete from todo_items where done_flg = 1
+	  delete from mainTodoDB where done_flg=1
   </delete>
 </mapper>

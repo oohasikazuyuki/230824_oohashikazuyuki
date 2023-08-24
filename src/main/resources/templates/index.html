@@ -5,35 +5,61 @@
 <title>TodoApp</title>
 </head>
 <body>
-  <h1>TodoList</h1>
-  <h3>マイタスク</h3>
-  <form method="post" th:action="@{/update}" th:each="todo : ${todos}" >
-    <input type="checkbox"name="done_flg" value="1"/>
-    <input type="hidden" name="id" th:value="${todo.id}" />
-    <input type="text" name="title"th:value="${todo.title}" />
-    <input type="date" name="time_limit" th:value="${todo.time_limit}" />
-    <input type="submit" value="更新" />
+	
+  	<h3>カテゴリ一覧</h3>
+	<form method="post" th:action="@{/}" th:each="categoryTodo :${categoryTodos}">
+	<input type="button" name="category" th:value="${categoryTodo.id} + ${categoryTodo.categoryName}"/>
+	</form>
+	
+	<h3>カテゴリ別タスク</h3>
+	<form method="post" th:action="@{/}" th:each="joinTodo :${joinTodos}">
+		<input type ="text" th:value="${joinTodo.category}" name="categoryID"/>
+		<input type ="text" th:value="${joinTodo.title}" name="categoryTitle"/>
+		<input type ="date" th:value="${joinTodo.time_limit}" name="categoryDate"/>
+	</form>
+	
+	<h3>カテゴリ作成</h3>
+	<form method="post" th:action="@{/addCategory}">
+		<input type="text" placeholder="カテゴリ名" name="categoryName"/>
+		<input type="submit" value="作成" name="categorySubmit"/>
+	</form>
+	
+	
+  <h3>マイタスク(ALL)</h3>
+  <form method="post" th:action="@{/update}" th:each="todo : ${todos}">
+	  <input type="checkbox" name="done_flg" value="1"/>
+	  <input type="hidden" name="id" th:value="${todo.id}"/>
+	  <input type="text" name="title" th:value="${todo.title}"/>
+	  <input type="date" name="time_limit" th:value="${todo.time_limit}"/>
+	  <input type="number" name="importance" th:value="${todo.importance}"/>
+	  <input type="number" name="category" th:value="${todo.category}"/>
+	  <input type="submit" value="更新"/>
   </form>
+<!--  <p th:each="todo : ${todos}" th:text="${todo.title}" />-->
 
-  <h3>完了済み</h3>
-   <form method="post" th:action="@{/update}" th:each="todo : ${doneTodos}" >
-    <input type="checkbox"name="done_flg" value="1"/>
-    <input type="hidden" name="id" th:value="${todo.id}" />
-    <input type="text" name="title"th:value="${todo.title}" style="text-decoration:line-through"/>
-    <input type="date" name="time_limit"th:value="${todo.time_limit}" />
-    <input type="submit" value="更新" />
-  </form>
-
+<h3>完了済み</h3>
+<form method="post" th:action="@{/update}" th:each="todo : ${doneTodos}">
+	<input type="checkbox" name="done_flg" value="1"/>
+	<input type="hidden" name="id" th:value="${todo.id}"/>
+	<input type="text" name="title" th:value="${todo.title}" style="text-decoration: line-through;"/>
+	<input type="date" name="time_limit" th:value="${todo.time_limit}"/>
+	<input type="number" name="importance" th:value="${todo.importance}"/>
+	<input type="number" name="category" th:value="${todo.category}"/>
+	<input type="submit" value="更新"/>
+</form>
+  
+  
   <h3>新しいタスクを追加</h3>
   <form method="post" th:action="@{/add}">
-    <input type="text" name="title" />
-    <input type="date" name="time_limit"/>
-    <input type="submit" value="追加" />
+	  <input type="text" placeholder="タイトル" name="title"/>
+	  <input type="date" name="time_limit"/>
+	  <input type ="number" placeholder="重要度" name="importance" min="1" max="3"/>
+	  <input type ="text" placeholder="カテゴリ" name="category"/>
+	  <input type="submit" name="追加"/>
   </form>
-
+  
   <form method="post" th:action="@{/delete}">
-    <input type="submit" value="完了済みを削除" />
+	  <input type="submit" value="完了済みを削除"/>
   </form>
-
 </body>
 </html>
